@@ -3,7 +3,7 @@ using System.IO;
 using System.Data;
 using System.Text;
 using Excel;
-
+using System.Configuration;
 namespace excel2json
 {
     /// <summary>
@@ -20,19 +20,44 @@ namespace excel2json
             System.DateTime startTime = System.DateTime.Now;
 
             //-- 分析命令行参数
-            var options = new Options();
             var parser = new CommandLine.Parser(with => with.HelpWriter = Console.Error);
-
+            var options = new Options();
             if (parser.ParseArgumentsStrict(args, options, () => Environment.Exit(-1)))
             {
-                //-- 执行导出操作
-                try
+                if (options.SourcePath != null)
                 {
-                    Run(options);
+                    FileInfo[] filist = new DirectoryInfo(options.SourcePath).GetFiles("*.xlsx");
+                    if (filist.Length > 0)
+                    {
+                        foreach (FileInfo item in filist)
+                        {
+                            var path = item.FullName.Replace(item.Extension, "");
+                            options.ExcelPath = item.FullName;
+                            options.HeaderRows = 3;
+                            options.JsonPath = path + ".json";
+                            options.JavaPath = path + ".java";
+                            try
+                            {
+                                Run(options);
+                            }
+                            catch (Exception exp)
+                            {
+                                Console.WriteLine("Error: " + exp.Message);
+                            }
+                        }
+                    }
                 }
-                catch (Exception exp)
+                else
                 {
-                    Console.WriteLine("Error: " + exp.Message);
+                    //-- 执行导出操作
+                    try
+                    {
+                        Run(options);
+                    }
+                    catch (Exception exp)
+                    {
+                        Console.WriteLine("Error: " + exp.Message);
+                    }
                 }
             }
 
@@ -113,9 +138,20 @@ namespace excel2json
                     string excelName = Path.GetFileName(excelPath);
 
                     CSDefineGenerator exporter = new CSDefineGenerator(sheet);
-                    exporter.ClassComment = string.Format("// Generate From {0}", excelName);
+                    //exporter.ClassComment = string.Format("// Generate From {0}", excelName);
                     exporter.SaveToFile(options.CSharpPath, cd);
                 }
+
+                //-- 生成Java定义文件
+                if (options.JavaPath != null && options.JavaPath.Length > 0)
+                {
+                    string excelName = Path.GetFileName(excelPath);
+
+                    JavaDefineGenerator exporter = new JavaDefineGenerator(sheet);
+                    //exporter.ClassComment = string.Format("// Generate From {0}", excelName);
+                    exporter.SaveToFile(options.JavaPath, cd);
+                }
+
             }
         }
     }

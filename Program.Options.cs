@@ -11,14 +11,14 @@ namespace excel2json
         /// </summary>
         private sealed class Options
         {
-            [Option('e', "excel", Required=true, HelpText = "输入的Excel文件路径.")]
+            [Option('e', "excel", Required = false, HelpText = "输入的Excel文件路径.")]
             public string ExcelPath
             {
                 get;
                 set;
             }
 
-            [Option('j', "json", Required = false, HelpText = "指定输出的json文件路径.")]
+            [Option('J', "json", Required = false, HelpText = "指定输出的json文件路径.")]
             public string JsonPath
             {
                 get;
@@ -32,21 +32,28 @@ namespace excel2json
                 set;
             }
 
-            [Option('p', "csharp", Required = false, HelpText = "指定输出的C#数据定义代码文件路径.")]
+            [Option('c', "csharp", Required = false, HelpText = "指定输出的C#数据定义代码文件路径.")]
             public string CSharpPath
             {
                 get;
                 set;
             }
 
-            [Option('h', "header", Required = true, HelpText = "表格中有几行是表头.")]
+            [Option('j', "java", Required = false, HelpText = "指定输出的Java数据定义代码文件路径.")]
+            public string JavaPath
+            {
+                get;
+                set;
+            }
+
+            [Option('h', "header", Required = false, DefaultValue = 3, HelpText = "表格中有几行是表头.默认是3")]
             public int HeaderRows
             {
                 get;
                 set;
             }
 
-            [Option('c', "encoding", Required = false, DefaultValue="utf8-nobom", HelpText = "指定编码的名称.")]
+            [Option('E', "encoding", Required = false, DefaultValue = "utf8-nobom", HelpText = "指定编码的名称.")]
             public string Encoding
             {
                 get;
@@ -58,6 +65,12 @@ namespace excel2json
             {
                 get;
                 set;
+            }
+
+            [Option('P', "sourcepath", Required = false, HelpText = "输入批量操作的Excel所在的文件夹路径.")]
+            public string SourcePath
+            {
+                get; set;
             }
         }
     }

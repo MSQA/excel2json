@@ -40,6 +40,8 @@ namespace excel2json
                 var rowData = new Dictionary<string, object>();
                 foreach (DataColumn column in sheet.Columns)
                 {
+                    string fieldName = column.ToString();
+
                     object value = row[column];
                     // 去掉数值字段的“.0”
                     if (value.GetType() == typeof(double))
@@ -48,9 +50,35 @@ namespace excel2json
                         if ((int)num == num)
                             value = (int)num;
                     }
-                    string fieldName = column.ToString();
+
+                    if (value.GetType() == typeof(DateTime))
+                    {
+                        //TODO: 处理Datetime类型数据
+                    }
+
+                    if (fieldName.StartsWith("R_"))
+                    {
+                        fieldName = fieldName.Replace("R_", "");
+                    }
+
+
+                    if (fieldName.StartsWith("QP_"))
+                    {
+                        fieldName = fieldName.Replace("QP_", "");
+                    }
+
+                    if (fieldName.StartsWith("MP_"))
+                    {
+                        fieldName = fieldName.Replace("MP_", "");
+                    }
+
+                    if (fieldName.StartsWith("P_"))
+                    {
+                        fieldName = fieldName.Replace("P_", "");
+                    }
+
                     // 表头自动转换成小写
-                    if (lowcase)    
+                    if (lowcase)
                         fieldName = fieldName.ToLower();
 
                     if (!string.IsNullOrEmpty(fieldName))
