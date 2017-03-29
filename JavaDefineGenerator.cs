@@ -120,10 +120,11 @@ namespace excel2json
             sb.AppendLine("}");
             sb.AppendLine();
 
-            sb.AppendLine("public class " + defName + " {");
+            sb.AppendLine("public class " + defName + " implements DataPoint {");
             sb.AppendLine();
             sb.AppendLine("\tprivate String TestCasePath;");
             sb.AppendLine("\tprivate List<" + defName + "Entity" + "> TestCaseEntities;");
+            sb.AppendLine("\tprivate HashMap map;");
             sb.AppendLine();
             sb.AppendLine("\tpublic " + defName + "(String testcasepath) {");
             sb.AppendLine("\t\tTestCasePath = testcasepath;");
@@ -137,18 +138,21 @@ namespace excel2json
             sb.AppendLine("\t\tif (size > 0) {");
             sb.AppendLine("\t\t\tfor (int i = 0; i < size; i++) {");
             sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(i);");
+            sb.AppendLine("\t\t\t\t//TODO: Write Code at here.");
+            sb.AppendLine();
+            sb.AppendLine();
             sb.AppendLine("\t\t\t}");
             sb.AppendLine("\t\t}");
             sb.AppendLine("\t}");
             sb.AppendLine();
             sb.AppendLine();
-            sb.AppendLine("\t public Map<Integer, Boolean> ValidateMockData() {");
+            sb.AppendLine("\t public HashMap<Integer, Boolean> ValidateMockData() {");
             sb.AppendLine("\t\tint size = TestCaseEntities.size();");
             sb.AppendLine("\t\tif (size > 0) {");
             sb.AppendLine("\t\t\tmap = new HashMap();");
             sb.AppendLine("\t\t\tfor (int i = 0; i < size; i++) {");
             sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(i);");
-            sb.AppendLine("\t\t\t\t");
+            sb.AppendLine("\t\t\t\t//TODO: Write Validate Code at here.");
             sb.AppendLine("\t\t\t\t");
             sb.AppendLine("\t\t\t\tBoolean ValidateResult = false;");
             sb.AppendLine("\t\t\t\tmap.put(entity.No, ValidateResult);");
