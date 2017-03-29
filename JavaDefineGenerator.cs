@@ -99,11 +99,16 @@ namespace excel2json
 
             //-- 创建代码字符串
             StringBuilder sb = new StringBuilder();
-
+            sb.AppendLine("package Models;");
+            sb.AppendLine();
+            sb.AppendLine("import Utils.FileHelper;");
+            sb.AppendLine("import Utils.GsonHelper;");
+            sb.AppendLine();
+            sb.AppendLine("import java.util.*;");
             sb.AppendLine();
             if (this.ClassComment != null)
                 sb.AppendLine(this.ClassComment);
-            sb.AppendFormat("public class {0}\r\n{{", defName);
+            sb.AppendFormat("class {0}\r\n{{", defName + "Entity");
             sb.AppendLine();
 
             foreach (FieldDef field in m_fieldList)
@@ -112,8 +117,48 @@ namespace excel2json
                 sb.AppendLine();
             }
 
-            sb.Append('}');
+            sb.AppendLine("}");
             sb.AppendLine();
+
+            sb.AppendLine("public class " + defName + " {");
+            sb.AppendLine();
+            sb.AppendLine("\tprivate String TestCasePath;");
+            sb.AppendLine("\tprivate List<" + defName + "Entity" + "> TestCaseEntities;");
+            sb.AppendLine();
+            sb.AppendLine("\tpublic " + defName + "(String testcasepath) {");
+            sb.AppendLine("\t\tTestCasePath = testcasepath;");
+            sb.AppendLine("\t\tString JsonContent = FileHelper.ReadFileContent(testcasepath);");
+            sb.AppendLine("\t\tTestCaseEntities = GsonHelper.convertEntities(JsonContent, " + defName + "Entity.class);");
+            sb.AppendLine("\t}");
+            sb.AppendLine();
+
+            sb.AppendLine("\tpublic void GenerateMockData() {");
+            sb.AppendLine("\t\tint size = TestCaseEntities.size();");
+            sb.AppendLine("\t\tif (size > 0) {");
+            sb.AppendLine("\t\t\tfor (int i = 0; i < size; i++) {");
+            sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(i);");
+            sb.AppendLine("\t\t\t}");
+            sb.AppendLine("\t\t}");
+            sb.AppendLine("\t}");
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("\t public Map<Integer, Boolean> ValidateMockData() {");
+            sb.AppendLine("\t\tint size = TestCaseEntities.size();");
+            sb.AppendLine("\t\tif (size > 0) {");
+            sb.AppendLine("\t\t\tmap = new HashMap();");
+            sb.AppendLine("\t\t\tfor (int i = 0; i < size; i++) {");
+            sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(i);");
+            sb.AppendLine("\t\t\t\t");
+            sb.AppendLine("\t\t\t\t");
+            sb.AppendLine("\t\t\t\tBoolean ValidateResult = false;");
+            sb.AppendLine("\t\t\t\tmap.put(entity.No, ValidateResult);");
+            sb.AppendLine("\t\t\t}");
+            sb.AppendLine("\t\t}");
+            sb.AppendLine("\t\treturn map;");
+            sb.AppendLine("\t}");
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("}");
 
 
             //-- 保存文件

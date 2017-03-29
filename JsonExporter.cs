@@ -43,6 +43,8 @@ namespace excel2json
                     string fieldName = column.ToString();
 
                     object value = row[column];
+
+
                     // 去掉数值字段的“.0”
                     if (value.GetType() == typeof(double))
                     {
@@ -54,6 +56,8 @@ namespace excel2json
                     if (value.GetType() == typeof(DateTime))
                     {
                         //TODO: 处理Datetime类型数据
+                        DateTime dt = (DateTime)value;
+                        value = dt.ToString("yyyy-MM-dd");
                     }
 
                     if (fieldName.StartsWith("R_"))
@@ -81,6 +85,11 @@ namespace excel2json
                     if (lowcase)
                         fieldName = fieldName.ToLower();
 
+                    if (value.ToString().ToLower() == "null")
+                    {
+                        value = null;
+                    }
+
                     if (!string.IsNullOrEmpty(fieldName))
                         rowData[fieldName] = value;
                 }
@@ -99,7 +108,7 @@ namespace excel2json
                 throw new Exception("JsonExporter内部数据为空。");
 
             //-- 转换为JSON字符串
-            string json = JsonConvert.SerializeObject(m_data, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(m_data.Values, Formatting.Indented);
 
             //-- 保存文件
             using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
