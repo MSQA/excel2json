@@ -179,6 +179,9 @@ namespace excel2json
             sb.AppendLine("\t\t\tfor (int i = 0; i < size; i++) {");
             sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(i);");
             sb.AppendLine("\t\t\t\t//TODO: Write Validate Code at here.");
+            sb.AppendLine("\t\t\t\t// JsonDocument json = ReadDynamoDB(this.getClass().getSimpleName(),entity.ShareClassId, entity.FileDateCalculated);");
+            sb.AppendLine("\t\t\t\t// entity.RealValue= ExtractJson(json, jsonPath);");
+            sb.AppendLine("\t\t\t\t// Boolean ValidateResult = CompareValue( entity.RealValue, entity.EarningYield);");
             sb.AppendLine("\t\t\t\t");
             sb.AppendLine("\t\t\t\tBoolean ValidateResult = false;");
             sb.AppendLine("\t\t\t\tmap.put(entity.No, ValidateResult);");
