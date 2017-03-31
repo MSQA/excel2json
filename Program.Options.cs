@@ -1,6 +1,6 @@
 ﻿using System;
 using CommandLine;
-using CommandLine.Text;
+
 
 namespace excel2json
 {
@@ -67,7 +67,7 @@ namespace excel2json
                 set;
             }
 
-            [Option('P', "sourcepath", Required = false, HelpText = "输入批量操作的Excel所在的文件夹路径.")]
+            [Option('P', "sourcepath", Required = false, HelpText = "输入批量操作的Excel所在的文件夹路径."),]
             public string SourcePath
             {
                 get; set;

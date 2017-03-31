@@ -115,6 +115,7 @@ namespace excel2json
                 //sbForEntityToString.AppendLine("\t\tsb.append(\"" + field.name + "=\" + " + field.name + " == null ? \"null\" : "+ field.name + ".toString() + \"\\n\");");
                 sbForEntity.AppendLine();
             }
+
             sbForEntity.AppendLine();
             sbForEntity.AppendLine();
             sbForEntity.AppendLine("\t@Override");
@@ -145,8 +146,7 @@ namespace excel2json
             sb.AppendLine();
             if (this.ClassComment != null)
                 sb.AppendLine(this.ClassComment);
-
-            sb.AppendLine("public class " + defName + " implements DataPoint {");
+            sb.AppendLine("public class " + defName + " implements IDataPointCalc {");
             sb.AppendLine();
             sb.AppendLine("\tprivate String TestCasePath;");
             sb.AppendLine("\tpublic List<" + defName + "Entity" + "> TestCaseEntities;");
@@ -158,7 +158,7 @@ namespace excel2json
             sb.AppendLine("\t\tTestCaseEntities = GsonHelper.convertEntities(JsonContent, " + defName + "Entity.class);");
             sb.AppendLine("\t}");
             sb.AppendLine();
-
+            sb.AppendLine();
             sb.AppendLine("\tpublic void GenerateMockData() {");
             sb.AppendLine("\t\tint size = TestCaseEntities.size();");
             sb.AppendLine("\t\tif (size > 0) {");
@@ -186,39 +186,30 @@ namespace excel2json
             sb.AppendLine("\t\t}");
             sb.AppendLine("\t\treturn map;");
             sb.AppendLine("\t}");
-
-
+            sb.AppendLine();
+            sb.AppendLine();
             sb.AppendLine("\t@Override");
             sb.AppendLine("\tpublic String OutputTestResult(HashMap<Integer, Boolean> result)");
             sb.AppendLine("\t{");
             sb.AppendLine("\t\tStringBuilder sb = new StringBuilder();");
             sb.AppendLine("\t\tsb.append(\" <div><table border='1' cellspacing='0' bordercolor='#000000' width = '100%' style='border-collapse:collapse;'><tr><td colspan='3'>\" + this.getClass().getSimpleName() + \"</td></tr>\"); ");
             sb.AppendLine("\t\tString Format = \" <tr><td>%s</td><td>%s</td><td>%s</td></tr>\";");
-
             sb.AppendLine("\t\tList<Integer> list = new ArrayList<>(result.keySet());");
             sb.AppendLine("\t\tfor (int i = 0; i < list.size(); i++)");
             sb.AppendLine("\t\t{");
             sb.AppendLine("\t\t\tint No = list.get(i);");
             sb.AppendLine("\t\t\tfor (int j = 0; j < result.size(); j++)");
             sb.AppendLine("\t\t\t{");
-            sb.AppendLine("\t\t\t\t"+ defName + "Entity entity = TestCaseEntities.get(j);");
+            sb.AppendLine("\t\t\t\t" + defName + "Entity entity = TestCaseEntities.get(j);");
             sb.AppendLine("\t\t\t\tif (No == entity.No)");
             sb.AppendLine("\t\t\t\t{");
             sb.AppendLine("\t\t\t\t\tsb.append(String.format(Format, entity.No, result.get(entity.No), entity.toString()));");
             sb.AppendLine("\t\t\t\t}");
             sb.AppendLine("\t\t\t}");
             sb.AppendLine("\t\t}");
-            sb.AppendLine("\t\tsb.append(\"</table></div> \");");
+            sb.AppendLine("\t\tsb.append(\"</table></div>\");");
             sb.AppendLine("\t\treturn sb.toString();");
             sb.AppendLine("\t}");
-
-
-
-
-
-
-
-
             sb.AppendLine();
             sb.AppendLine();
             sb.AppendLine("}");

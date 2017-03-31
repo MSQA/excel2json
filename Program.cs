@@ -26,16 +26,25 @@ namespace excel2json
             {
                 if (options.SourcePath != null)
                 {
+                    if (!Directory.Exists(ConfigurationManager.AppSettings["DataPointTestCaseJsonFilePath"].ToString()))
+                    {
+                        Directory.CreateDirectory(ConfigurationManager.AppSettings["DataPointTestCaseJsonFilePath"].ToString());
+                    }
+                    if (!Directory.Exists(ConfigurationManager.AppSettings["DataPointTestCaseJavaFilePath"].ToString()))
+                    {
+                        Directory.CreateDirectory(ConfigurationManager.AppSettings["DataPointTestCaseJavaFilePath"].ToString());
+                    }
+
                     FileInfo[] filist = new DirectoryInfo(options.SourcePath).GetFiles("*.xlsx");
                     if (filist.Length > 0)
                     {
                         foreach (FileInfo item in filist)
                         {
-                            var path = item.FullName.Replace(item.Extension, "");
+                            var DataPoint = item.Name.Replace(item.Extension, "");
                             options.ExcelPath = item.FullName;
                             options.HeaderRows = 3;
-                            options.JsonPath = path + ".json";
-                            options.JavaPath = path + ".java";
+                            options.JsonPath = Path.Combine(ConfigurationManager.AppSettings["DataPointTestCaseJsonFilePath"].ToString(), DataPoint + ".json");
+                            options.JavaPath = Path.Combine(ConfigurationManager.AppSettings["DataPointTestCaseJavaFilePath"].ToString(), DataPoint + ".java");
                             try
                             {
                                 Run(options);
@@ -45,6 +54,10 @@ namespace excel2json
                                 Console.WriteLine("Error: " + exp.Message);
                             }
                         }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Don't find the TestCase Excel file.");
                     }
                 }
                 else
